@@ -66,7 +66,7 @@ namespace ELicznikScraper
             
             var serviceResponse = await _httpClient.SendAsync(serviceRequest);
             
-            if (!serviceResponse.IsSuccessStatusCode) 
+            if (! (await CheckIfSessionIsAlive())) 
             {
                 return false;
             }

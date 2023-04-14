@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChoETL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -87,7 +88,7 @@ namespace ELicznikScraper
             return true;
         }
 
-        public async Task<string> GetData(DateOnly from, DateOnly to, DataFrequency dataFrequency = DataFrequency.Hourly, FileType fileType = FileType.CSV, DataScope dataScope = DataScope.ConsumptionOnly)
+        public async Task<string> GetData(DateOnly from, DateOnly to, DataFrequency dataFrequency = DataFrequency.Hourly, FileType fileType = FileType.JSON, DataScope dataScope = DataScope.ConsumptionOnly)
         {
             //check if user is signed in and re-logs him if not
             if (! await CheckIfSessionIsAlive())
@@ -162,14 +163,27 @@ namespace ELicznikScraper
                 }
             }
 
+            var csv = await dataResponse.Content.ReadAsStringAsync();
 
-            if (fileType == FileType.CSV)
+            //if (fileType == FileType.CSV)
+            //{
+            //    return csv;
+            //}
+
+
+            csv = csv.Replace(",", ".");
+            csv = csv.Replace($";\n", "\n");
+            csv = csv.Replace(";", ",");
+            StringBuilder sb = new StringBuilder();
+            using (var p = ChoCSVReader.LoadText(csv)
+                .WithFirstLineHeader()
+                )
             {
-                return await dataResponse.Content.ReadAsStringAsync();
+                using (var w = new ChoJSONWriter(sb))
+                    w.Write(p);
             }
 
-            //add parsing to json here
-            return await dataResponse.Content.ReadAsStringAsync();
+            return sb.ToString();
         }
 
         public async Task<string> GetData()

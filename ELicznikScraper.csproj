@@ -4,6 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>ELicznikScraper</Title>
+    <Company>pppfkp</Company>
+    <Authors>pppfkp</Authors>
+    <Description>WebScraping library to retrieve data from tauron e-licznik.</Description>
+    <PackageId />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/pppfkp/ELicznikWebScraper</RepositoryUrl>
+    <PackageTags>webscraper;tauron;elicznik</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>

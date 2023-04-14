@@ -32,9 +32,14 @@ namespace ELicznikScraper
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
         }
 
+        ~ELicznik() 
+        {
+             SignOut();
+        }
+
         public async Task<bool> ChangeUser(string username, string password)
         {
-            //SignOut
+            SignOut();
             _username = username;
             _password = password;
             return await SignIn();
@@ -65,6 +70,20 @@ namespace ELicznikScraper
                 return false;
             }
 
+            return true;
+        }
+
+        private bool SignOut()
+        {
+            var logoutRequest = new HttpRequestMessage(HttpMethod.Get, $"https://elicznik.tauron-dystrybucja.pl/applogout");
+
+            //response sets session cookie on logowanie.tauron-dystrybucja.pl domain
+            var logoutResponse = _httpClient.Send(logoutRequest);
+
+            if (logoutResponse.StatusCode != HttpStatusCode.Found)
+            {
+                return false;
+            }
             return true;
         }
 
